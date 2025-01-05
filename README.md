@@ -1,2 +1,2 @@
 # otus
-Домашние задания по курсу Observability: мониторинг, логирование, трейсинг
+GAP-1 домашнее задание по уроку Prometheus - Exporters, Service Discovery
