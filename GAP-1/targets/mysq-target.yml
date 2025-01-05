@@ -1,0 +1,4 @@
+- labels:
+    service: mysql
+  targets:
+    - '192.168.0.242:9104'      

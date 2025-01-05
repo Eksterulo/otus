@@ -1,0 +1,4 @@
+- labels:
+    service: php-fpm
+  targets:
+    - '192.168.0.242:9253'      
