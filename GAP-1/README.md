@@ -59,3 +59,5 @@ WantedBy=multi-user.target
  - sudo systemctl enable php-fpm-exporter
  - sudo systemctl status php-fpm-exporter
  - curl -v http://localhost:9253
+- установка blackbox-exporter
+
