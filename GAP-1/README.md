@@ -25,9 +25,11 @@ password=пароль для доступа к базе
 ### Установка php-fpm_exporter. На ВМ с CMS.
 - настройка php-fpm
   - в /etc/php/8.1/fpm/pool.d/www.conf раскомментировать строки
-  - > pm.status_listen = 127.0.0.1:9001
-  - > pm.status_path = /status
-  - > ping.path = /ping
+```
+pm.status_listen = 127.0.0.1:9001
+pm.status_path = /status
+ping.path = /ping
+```
   - sudo systemctl restart php8.1-fpm
   - systemctl status php8.1-fpm
   - curl -v http;//localhost:9001
