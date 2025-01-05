@@ -15,9 +15,11 @@
 ### Установка mysql-exporter. На ВМ с CMS.
 - sudo apt install prometheus-mysql-exporter
 - sudo vi /var/lib/prometheus/.my.cnf
-  - > [client]
-  - > user=пользователь для доступа к базе
-  - > password=пароль для доступа к базе
+```
+[client]
+user=пользователь для доступа к базе
+password=пароль для доступа к базе
+```
 - sudo systemctl status prometheus-mysqld-exporter
 - curl -v http://localhost:9104
 ### Установка php-fpm_exporter. На ВМ с CMS.
@@ -35,3 +37,24 @@
   - sudo chmod +x /usr/bin/php-fpm_exporter
 - проверка работы php-fpm_exporter и доступности php-fpm
   - php-fpm_exporter get --phpfpm.scrape-uri tcp://127.0.0.1:9001/status
+- запуск как службы
+  - sudo vi /etc/systemd/system/php-fpm-exporter.service
+```
+[Unit]
+Description=PHP-FPM Exporter
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/php-fpm_exporter server --phpfpm.scrape-uri tcp://127.0.0.1:9001/status
+Restart=always
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target
+```
+ - sudo systemctl daemon-reload
+ - sudo systemctl start php-fpm-exporter
+ - sudo systemctl enable php-fpm-exporter
+ - sudo systemctl status php-fpm-exporter
+ - curl -v http://localhost:9253
