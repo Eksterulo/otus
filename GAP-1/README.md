@@ -28,7 +28,6 @@ password=пароль для доступа к базе
 ```
 pm.status_listen = 127.0.0.1:9001
 pm.status_path = /status
-ping.path = /ping
 ```
   - sudo systemctl restart php8.1-fpm
   - systemctl status php8.1-fpm
