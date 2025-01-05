@@ -1,6 +1,37 @@
 # GAP-1
 Первое домашнее задание otus. 
-## Разворачивание prometheus, grafana и blackbox exporter
-## Установка и настройка node-exporter
-## Установка и настройка mysql-ewxporter
-## Установка и настройка php-fpm-exporter
+### Описание ДЗ:
+1. На виртуальной машине установите любую open source CMS, которая включает в себя следующие компоненты: nginx, php-fpm, database (MySQL or Postgresql)
+2. На этой же виртуальной машине установите Prometheus exporters для сбора метрик со всех компонентов системы (начиная с VM и заканчивая DB, не забудьте про blackbox exporter, который будет проверять доступность вашей CMS)
+3. На этой же или дополнительной виртуальной машине установите Prometheus, задачей которого будет раз в 5 секунд собирать метрики с экспортеров.
+4. Задание со звездочкой (повышенная сложность)
++ на VM с установленной CMS слишком много “портов экспортеров торчит наружу” и они доступны всем, попробуйте настроить доступ только по одному и добавить авторизацию.
++ Если вы выполнили задание со звездочкой номер 1, то - добавить SSL =)
+## Пункт 2. 
+### Установка node-exporter. На ВМ с CMS.
+- sudo apt install prometheus-node-exporter
+- systemctl status prometheus-node-exporter
+- curl -v http://localhost:9100
+### Установка mysql-exporter. На ВМ с CMS.
+- sudo apt install prometheus-mysql-exporter
+- sudo vi /var/lib/prometheus/.my.cnf
+  - > [client]
+  - > user=пользователь для доступа к базе
+  - > password=пароль для доступа к базе
+- sudo systemctl status prometheus-mysqld-exporter
+- curl -v http://localhost:9104
+### Установка php-fpm_exporter. На ВМ с CMS.
+- настройка php-fpm
+  - в /etc/php/8.1/fpm/pool.d/www.conf раскомментировать строки
+  - > pm.status_listen = 127.0.0.1:9001
+  - > pm.status_path = /status
+  - > ping.path = /ping
+  - sudo systemctl restart php8.1-fpm
+  - systemctl status php8.1-fpm
+  - curl -v http;//localhost:9001
+- установка php-fpm_exporter
+  - wget https://github.com/hipages/php-fpm_exporter/releases/download/v2.2.0/php-fpm_exporter_2.2.0_linux_amd64
+  - sudo mv ./php-fpm_exporter_2.2.0_linux_amd64 /usr/bin/php-fpm_exporter
+  - sudo chmod +x /usr/bin/php-fpm_exporter
+- проверка работы php-fpm_exporter и доступности php-fpm
+  - php-fpm_exporter get --phpfpm.scrape-uri tcp://127.0.0.1:9001/status
