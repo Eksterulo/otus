@@ -1,0 +1,28 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'blackbox'
+    metrics_path: /probe
+    params:
+      module: [icmp]
+    static_configs:
+      - targets:
+          - 192.168.0.242
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+  - job_name: 'service_discovery'
+    file_sd_configs:
+      - files:
+        - 'targets/*.yml'
+remote_write:
+  - url: "http://mimir:8080/api/v1/push"
+    write_relabel_configs:
+      - source_labels: []
+        target_label: site
+        replacement: prod
+    headers:
+      X-Scope-OrgID: otus
