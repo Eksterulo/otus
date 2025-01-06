@@ -69,6 +69,8 @@ services:
       - "mimir-3"
     ports:
       - 9009:9009
+    networks:
+      - monitoring      
 
   grafana:
     image: grafana/grafana:latest
